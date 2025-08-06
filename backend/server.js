@@ -136,7 +136,7 @@ app.post('/api/generate-email', async (req, res) => {
     console.error('- EMAIL_USER:', process.env.EMAIL_USER ? 'SET' : 'NOT SET');
     console.error('- EMAIL_PASS:', process.env.EMAIL_PASS ? 'SET' : 'NOT SET');
     console.error('- NODE_ENV:', process.env.NODE_ENV);
-    
+
     res.status(500).json({
       error: 'Failed to generate email',
       details: error.message,
