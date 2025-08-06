@@ -212,7 +212,7 @@ app.get('/api/test-groq', async (req, res) => {
           content: 'Say "Hello World"'
         }
       ],
-      model: 'mixtral-8x7b-32768',
+      model: 'llama3-8b-8192',
       temperature: 0.7,
       max_tokens: 50
     });
