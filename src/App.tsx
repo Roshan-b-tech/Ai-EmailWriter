@@ -119,7 +119,7 @@ function App() {
 
     setSending(true);
     try {
-      const apiUrl = process.env.VITE_API_URL || 'http://localhost:3001';
+      const apiUrl = process.env.VITE_API_URL || 'https://ai-emailwriter.onrender.com';
       const response = await fetch(`${apiUrl}/api/send-emails`, {
         method: 'POST',
         headers: {
