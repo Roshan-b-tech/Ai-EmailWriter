@@ -31,7 +31,7 @@ function App() {
 
   const addRecipient = () => {
     if (!emailInput.trim()) return;
-    
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(emailInput)) {
       showNotification('error', 'Please enter a valid email address');
@@ -67,7 +67,8 @@ function App() {
 
     setIsGenerating(true);
     try {
-      const response = await fetch('/api/generate-email', {
+      const apiUrl = process.env.VITE_API_URL || '';
+      const response = await fetch(`${apiUrl}/api/generate-email`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -118,7 +119,8 @@ function App() {
 
     setSending(true);
     try {
-      const response = await fetch('/api/send-emails', {
+      const apiUrl = process.env.VITE_API_URL || '';
+      const response = await fetch(`${apiUrl}/api/send-emails`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -161,9 +163,8 @@ function App() {
 
       {/* Notification */}
       {notification && (
-        <div className={`fixed top-20 right-6 z-50 p-4 rounded-lg shadow-lg flex items-center space-x-2 ${
-          notification.type === 'success' ? 'bg-green-500' : 'bg-red-500'
-        } text-white`}>
+        <div className={`fixed top-20 right-6 z-50 p-4 rounded-lg shadow-lg flex items-center space-x-2 ${notification.type === 'success' ? 'bg-green-500' : 'bg-red-500'
+          } text-white`}>
           {notification.type === 'success' ? <Check className="h-5 w-5" /> : <X className="h-5 w-5" />}
           <span>{notification.message}</span>
         </div>
@@ -179,7 +180,7 @@ function App() {
                 <Users className="h-5 w-5 text-blue-600" />
                 <h2 className="text-xl font-semibold text-gray-900">Recipients</h2>
               </div>
-              
+
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-3">
                   <input
@@ -198,7 +199,7 @@ function App() {
                     className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                   />
                 </div>
-                
+
                 <button
                   onClick={addRecipient}
                   className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-2 px-4 rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-200 flex items-center justify-center space-x-2"
@@ -234,14 +235,14 @@ function App() {
                 <Sparkles className="h-5 w-5 text-purple-600" />
                 <h2 className="text-xl font-semibold text-gray-900">Email Prompt</h2>
               </div>
-              
+
               <textarea
                 placeholder="Describe the email you want to generate... (e.g., 'Write a professional follow-up email for a job interview')"
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
                 className="w-full h-32 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all resize-none"
               />
-              
+
               <button
                 onClick={generateEmail}
                 disabled={isGenerating || !prompt.trim()}
@@ -271,7 +272,7 @@ function App() {
                     <Mail className="h-5 w-5 text-green-600" />
                     <h2 className="text-xl font-semibold text-gray-900">Generated Email</h2>
                   </div>
-                  
+
                   <div className="flex space-x-2">
                     {!isEditing ? (
                       <button
