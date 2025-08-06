@@ -13,11 +13,12 @@ const PORT = process.env.PORT || 3001;
 app.use(cors({
   origin: process.env.NODE_ENV === 'production'
     ? [
-      'https://ai-email-writer-frontend.onrender.com',
-      'https://ai-email-writer-41wfh9sj8-roshangehlot500-gmailcoms-projects.vercel.app',
-      'https://ai-emailwriter.onrender.com',
-      'http://localhost:5173'
-    ]
+        'https://ai-email-writer-frontend.onrender.com',
+        'https://ai-email-writer-41wfh9sj8-roshangehlot500-gmailcoms-projects.vercel.app',
+        'https://ai-email-writer-gamma.vercel.app',
+        'https://ai-emailwriter.onrender.com',
+        'http://localhost:5173'
+      ]
     : 'http://localhost:5173',
   credentials: true
 }));
