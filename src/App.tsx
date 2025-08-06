@@ -67,7 +67,7 @@ function App() {
 
     setIsGenerating(true);
     try {
-      const apiUrl = process.env.VITE_API_URL || '';
+      const apiUrl = process.env.VITE_API_URL || 'http://localhost:3001';
       const response = await fetch(`${apiUrl}/api/generate-email`, {
         method: 'POST',
         headers: {
@@ -119,7 +119,7 @@ function App() {
 
     setSending(true);
     try {
-      const apiUrl = process.env.VITE_API_URL || '';
+      const apiUrl = process.env.VITE_API_URL || 'http://localhost:3001';
       const response = await fetch(`${apiUrl}/api/send-emails`, {
         method: 'POST',
         headers: {
