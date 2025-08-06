@@ -11,15 +11,14 @@ const PORT = process.env.PORT || 3001;
 
 // Middleware
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production'
-    ? [
-      'https://ai-email-writer-frontend.onrender.com',
-      'https://ai-email-writer-41wfh9sj8-roshangehlot500-gmailcoms-projects.vercel.app',
-      'https://ai-email-writer-gamma.vercel.app',
-      'https://ai-emailwriter.onrender.com',
-      'http://localhost:5173'
-    ]
-    : 'http://localhost:5173',
+  origin: [
+    'https://ai-email-writer-frontend.onrender.com',
+    'https://ai-email-writer-41wfh9sj8-roshangehlot500-gmailcoms-projects.vercel.app',
+    'https://ai-email-writer-gamma.vercel.app',
+    'https://ai-emailwriter.onrender.com',
+    'http://localhost:5173',
+    'http://localhost:3000'
+  ],
   credentials: true
 }));
 app.use(express.json());
@@ -27,6 +26,8 @@ app.use(express.json());
 // Initialize Groq client
 const apiKey = process.env.GROQ_API_KEY || 'your-groq-api-key-here';
 console.log('API Key loaded:', apiKey ? `${apiKey.substring(0, 10)}...` : 'NOT FOUND');
+console.log('API Key length:', apiKey ? apiKey.length : 0);
+console.log('API Key starts with gsk_:', apiKey ? apiKey.startsWith('gsk_') : false);
 
 const groq = new Groq({
   apiKey: apiKey
@@ -66,7 +67,7 @@ app.post('/api/generate-email', async (req, res) => {
           content: `Generate a professional email based on this prompt: ${prompt}. Return only valid JSON with "subject" and "content" fields.`
         }
       ],
-      model: 'llama3-8b-8192',
+      model: 'mixtral-8x7b-32768',
       temperature: 0.7,
       max_tokens: 1000
     });
@@ -198,6 +199,39 @@ app.post('/api/send-emails', async (req, res) => {
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({ status: 'Server is running', timestamp: new Date().toISOString() });
+});
+
+// Test Groq API endpoint
+app.get('/api/test-groq', async (req, res) => {
+  try {
+    console.log('Testing Groq API connection...');
+    const completion = await groq.chat.completions.create({
+      messages: [
+        {
+          role: 'user',
+          content: 'Say "Hello World"'
+        }
+      ],
+      model: 'mixtral-8x7b-32768',
+      temperature: 0.7,
+      max_tokens: 50
+    });
+
+    const response = completion.choices[0]?.message?.content;
+    console.log('Groq API test successful:', response);
+    res.json({
+      success: true,
+      message: 'Groq API is working',
+      response: response
+    });
+  } catch (error) {
+    console.error('Groq API test failed:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      stack: error.stack
+    });
+  }
 });
 
 app.listen(PORT, () => {
