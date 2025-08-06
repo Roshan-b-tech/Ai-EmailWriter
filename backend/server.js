@@ -67,7 +67,7 @@ app.post('/api/generate-email', async (req, res) => {
           content: `Generate a professional email based on this prompt: ${prompt}. Return only valid JSON with "subject" and "content" fields.`
         }
       ],
-      model: 'mixtral-8x7b-32768',
+      model: 'llama3-8b-8192',
       temperature: 0.7,
       max_tokens: 1000
     });
