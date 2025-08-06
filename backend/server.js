@@ -130,9 +130,17 @@ app.post('/api/generate-email', async (req, res) => {
     res.json(parsedEmail);
   } catch (error) {
     console.error('Error generating email:', error);
+    console.error('Error stack:', error.stack);
+    console.error('Environment check:');
+    console.error('- GROQ_API_KEY:', process.env.GROQ_API_KEY ? 'SET' : 'NOT SET');
+    console.error('- EMAIL_USER:', process.env.EMAIL_USER ? 'SET' : 'NOT SET');
+    console.error('- EMAIL_PASS:', process.env.EMAIL_PASS ? 'SET' : 'NOT SET');
+    console.error('- NODE_ENV:', process.env.NODE_ENV);
+    
     res.status(500).json({
       error: 'Failed to generate email',
-      details: error.message
+      details: error.message,
+      timestamp: new Date().toISOString()
     });
   }
 });
